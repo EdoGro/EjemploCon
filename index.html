@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>   
+<head>      
+ <title>Contact Example</title>    
+ <script type="text/javascript" charset="utf-8" src="cordova.js"></script>  
+ <script type="text/javascript" charset="utf-8">          
+  // Wait for device API libraries to load         
+  document.addEventListener("deviceready", onDeviceReady, false);      
+    // device APIs are available  
+
+    function onDeviceReady() {         
+    // find all contacts with ' ' in any name field    ,If field is empty or full
+    var options = new ContactFindOptions();    
+    options.filter = "";   
+    options.multiple = true;
+    /*
+    Keyword search  
+    Name: "displayName"  ,
+    Phone number: " phoneNumbers" //ContactField[] 
+
+    */  
+    var fields = ["displayName", "name", "phoneNumbers"];                
+    navigator.contacts.find(fields, onSuccess, onError, options);            } 
+    
+
+    // onSuccess: Get a snapshot of the current contacts        
+    function onSuccess(contacts) {     
+
+      // Contact and telephone number on here
+      var aResult = [];    
+
+      for (var i = 0; contacts[i]; i++) {                    
+        console.log("Display Name = " + contacts[i].displayName); 
+
+        if (contacts[i].phoneNumbers && contacts[i].phoneNumbers.length) {
+
+          var contactPhoneList =[];
+
+          for (var j = 0; contacts[i].phoneNumbers[j]; j++) {
+         // alert(contacts[i].phoneNumbers[j].type+"    "+contacts[i].displayName+"---------" + contacts[i].phoneNumbers[j].value );
+
+         contactPhoneList.push(
+         { 
+          'type' :  contacts[i].phoneNumbers[j].type, 
+          'value' : contacts[i].phoneNumbers[j].value
+        }
+        );
+
+       };        
+
+       aResult.push({
+        name:contacts[i].displayName,
+        phone:contactPhoneList
+      });
+
+     };
+        //
+      }
+
+		//Iterative acquisition contacts and number
+    for (var i = 0; aResult[i]; i++) {
+      for (var j = 0 ; aResult[i].phone[j]; j++) {
+
+        alert(aResult[i].name +"--------"+ aResult[i].phone[j].type+"-----"+aResult[i].phone[j].value
+          );
+      };
+
+
+    };
+  }   
+    // onError: Failed to get the contacts   
+    function onError(contactError) {                alert('onError!');            }   
+
+    function baozi(){ alert("S1");}
+
+    function intent() {       onDeviceReady();     }    
+
+
+  </script>   
+</head>   
+<body>     
+ <h1>Example</h1>    
+ <p>Find Contacts</p>  
+
+ <p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>    
+ <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>    
+ <p><a href="#" onclick="baozi(); return false;">Vibrate</a></p>  
+ <p><a href="#" onclick="intent(); return false;">The Html jumps to the Android interface</a></p>   
+</body>
+</html>
